@@ -840,9 +840,6 @@ def script_main(script_name, download, download_playlist = None):
     global cookies_txt
     cookies_txt = None
 
-    print (opts)
-    print (args)
-
     info_only = False
     playlist = False
     merge = True
