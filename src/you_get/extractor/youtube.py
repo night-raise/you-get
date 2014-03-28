@@ -65,6 +65,8 @@ def youtube_download_by_id(id, title=None, output_dir='.', merge=True, info_only
     """
 
     raw_video_info = get_content('http://www.youtube.com/get_video_info?video_id=%s' % id)
+    print(raw_video_info)
+    #raw_video_info = open('get_video_info').read()
     video_info = parse.parse_qs(raw_video_info)
 
     if video_info['status'] == ['ok'] and ('use_cipher_signature' not in video_info or video_info['use_cipher_signature'] == ['False']):
