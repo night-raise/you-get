@@ -1019,10 +1019,15 @@ def download_urls(
             parts.append(output_filepath_i)
             # print 'Downloading %s [%s/%s]...' % (tr(filename), i + 1, len(urls))
             bar.update_piece(i + 1)
-            url_save(
-                url, output_filepath_i, bar, refer=refer, is_part=True, faker=faker,
-                headers=headers, **kwargs
-            )
+            concurrency = 10
+            cmd = f"aria2c -c -j {concurrency} -x {concurrency} -s {concurrency} -k 1M -o {output_filepath_i} '{url[0]}'"
+            print('cmd:', cmd)
+            os.system(cmd)
+
+            # url_save(
+            #     url, output_filepath_i, bar, refer=refer, is_part=True, faker=faker,
+            #     headers=headers, **kwargs
+            # )
         bar.done()
 
         if not merge:

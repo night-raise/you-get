@@ -125,12 +125,15 @@ class YouTube(VideoExtractor):
 
     def chunk_by_range(url, size):
         urls = []
-        chunk_size = 10485760
-        start, end = 0, chunk_size - 1
+        chunk_size = 10000000000
+        start, end = 0, min(chunk_size, size) - 1
         urls.append('%s&range=%s-%s' % (url, start, end))
         while end + 1 < size:  # processed size < expected size
             start, end = end + 1, end + chunk_size
             urls.append('%s&range=%s-%s' % (url, start, end))
+        # print("---- URLs ----")
+        # print(urls)
+        # print('--- end ---')
         return urls
 
     def get_url_from_vid(vid):
