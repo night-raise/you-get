@@ -222,6 +222,9 @@ class VideoExtractor():
             else:
                 urls = self.dash_streams[stream_id]['src']
                 ext = self.dash_streams[stream_id]['container']
+                if 'audio_only' in kwargs and kwargs['audio_only'] and len(urls) > 1:
+                    urls = urls[1]
+                    ext = 'mp3'
                 total_size = self.dash_streams[stream_id]['size']
 
             if ext == 'm3u8' or ext == 'm4a':
