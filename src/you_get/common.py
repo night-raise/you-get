@@ -1005,14 +1005,32 @@ def download_urls(
     else:
         bar = PiecesProgressBar(total_size, len(urls))
 
+    concurrency = 16
+    if refer:
+        this_refer = f"--referer='{refer}'"
+    else:
+        this_refer = ''
+
+    if headers:
+        this_headers = " ".join(map(lambda x: f"--header=\"{x[0]}:{x[1]}\"", headers.items()))
+    else:
+        this_headers = ""
+
     if len(urls) == 1:
         url = urls[0]
-        print('Downloading %s ...' % tr(output_filename))
         bar.update()
-        url_save(
-            url, output_filepath, bar, refer=refer, faker=faker,
-            headers=headers, **kwargs
-        )
+
+        cmd = f"aria2c -c --file-allocation=none " \
+              f"-j {concurrency} " \
+              f"{this_refer} {this_headers} " \
+              f"-x {concurrency} " \
+              f"-s {concurrency} " \
+              f"-k 1M " \
+              f"-d \"{output_dir}\" " \
+              f"-o \"{output_filename}\" " \
+              f"\"{url}\""
+        os.system(cmd)
+
         bar.done()
     else:
         parts = []
@@ -1022,18 +1040,7 @@ def download_urls(
             output_filename_i = get_output_filename(urls, title, ext, output_dir, merge, part=i)
             output_filepath_i = os.path.join(output_dir, output_filename_i)
             parts.append(output_filepath_i)
-            # print 'Downloading %s [%s/%s]...' % (tr(filename), i + 1, len(urls))
             bar.update_piece(i + 1)
-            concurrency = 16
-            if refer:
-                this_refer = f"--referer='{refer}'"
-            else:
-                this_refer = ''
-
-            if headers:
-                this_headers = " ".join(map(lambda x: f"--header=\"{x[0]}:{x[1]}\"", headers.items()))
-            else:
-                this_headers = ""
 
             cmd = f"aria2c -c --file-allocation=none " \
                   f"-j {concurrency} " \
@@ -1044,7 +1051,6 @@ def download_urls(
                   f"-d \"{output_dir}\" " \
                   f"-o \"{output_filename_i}\" " \
                   f"\"{url[0]}\""
-            print('cmd:', cmd)
             os.system(cmd)
 
             # url_save(
