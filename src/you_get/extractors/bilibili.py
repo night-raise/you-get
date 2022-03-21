@@ -204,6 +204,8 @@ class Bilibili(VideoExtractor):
             pn = initial_state['videoData']['videos']
             if pn > 1 and not kwargs.get('playlist'):
                 log.w('This is a multipart video. (use --playlist to download all parts.)')
+            else:
+                self.pn = pn
 
             # set video title
             self.title = initial_state['videoData']['title']
