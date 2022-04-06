@@ -147,10 +147,7 @@ fake_headers = {
     # noqa
 }
 
-if sys.stdout.isatty():
-    default_encoding = sys.stdout.encoding.lower()
-else:
-    default_encoding = locale.getpreferredencoding().lower()
+default_encoding = locale.getpreferredencoding().lower()
 
 
 def rc4(key, data):
